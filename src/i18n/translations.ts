@@ -173,6 +173,6 @@ export const translations = {
     },
     footer: "Conçu avec soin.",
   },
-} as const;
+};
 
 export type Dict = (typeof translations)["en"];
