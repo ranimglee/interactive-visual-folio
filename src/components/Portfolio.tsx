@@ -15,6 +15,10 @@ import {
   Send,
   Calendar,
 } from "lucide-react";
+import { useLang } from "@/i18n/LanguageContext";
+import { projects, type Project } from "@/data/projects";
+import { ProjectModal } from "./ProjectModal";
+import { CvMenu } from "./CvMenu";
 
 const Scene3D = lazy(() => import("./Scene3D").then((m) => ({ default: m.Scene3D })));
 
@@ -29,52 +33,19 @@ const skills = [
   { name: "Power BI", level: 50 },
 ];
 
-const projects = [
-  {
-    title: "DevOps Pipeline Implementation",
-    tag: "DevOps",
-    desc: "CI/CD pipeline using Jenkins and Docker to streamline deployment and improve system reliability.",
-    gradient: "from-cyan-500/30 to-blue-500/30",
-  },
-  {
-    title: "Gym Management Web App",
-    tag: "Web",
-    desc: "Comprehensive web platform with membership tracking, scheduling, and performance analytics.",
-    gradient: "from-fuchsia-500/30 to-pink-500/30",
-  },
-  {
-    title: "Senior Care Web App",
-    tag: "Web",
-    desc: "User-friendly web app tailored for aged users to connect with caregivers and manage daily activities.",
-    gradient: "from-emerald-500/30 to-teal-500/30",
-  },
-  {
-    title: "Food Delivery Platform",
-    tag: "Mobile",
-    desc: "Dual-platform solution for users and owners — food ordering and management on web and mobile.",
-    gradient: "from-amber-500/30 to-orange-500/30",
-  },
-];
-
-const services = [
-  { icon: Code2, title: "Web Development", desc: "Fast, responsive, scalable websites with React and Node.js." },
-  { icon: Smartphone, title: "Mobile Apps", desc: "Cross-platform mobile applications crafted with FlutterFlow." },
-  { icon: Palette, title: "UI Design", desc: "User-friendly, aesthetic interfaces designed in Figma." },
-  { icon: Layers, title: "Full-Stack", desc: "End-to-end development including database and REST APIs." },
-];
+const serviceIcons = [Code2, Smartphone, Palette, Layers];
 
 export function Portfolio() {
+  const { lang, t } = useLang();
   const [mounted, setMounted] = useState(false);
+  const [openProject, setOpenProject] = useState<Project | null>(null);
+
   useEffect(() => setMounted(true), []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
-      {/* Ambient gradient backdrop */}
       <div className="pointer-events-none fixed inset-0 -z-10">
-        <div
-          className="absolute inset-0 opacity-70"
-          style={{ background: "var(--gradient-glow)" }}
-        />
+        <div className="absolute inset-0 opacity-70" style={{ background: "var(--gradient-glow)" }} />
         <div className="absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[120px]" />
         <div className="absolute top-1/3 -right-40 h-[500px] w-[500px] rounded-full bg-accent/20 blur-[120px]" />
       </div>
@@ -93,32 +64,29 @@ export function Portfolio() {
           <div className="animate-fade-up">
             <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground mb-6">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              Available for freelance
+              {t.hero.badge}
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.05] tracking-tight">
-              Hi, I'm <span className="text-gradient">Ranim</span>
+              {t.hero.greeting} <span className="text-gradient">Ranim</span>
               <br />
-              <span className="text-foreground/90">Full-stack</span>{" "}
-              <span className="text-gradient">Developer</span>
+              <span className="text-foreground/90">{t.hero.role1}</span>{" "}
+              <span className="text-gradient">{t.hero.role2}</span>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl">
-              Final-year software engineering student crafting innovative,
-              scalable web and mobile experiences with a love for clean code
-              and beautiful interfaces.
-            </p>
+            <p className="mt-6 text-lg text-muted-foreground max-w-xl">{t.hero.desc}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#portfolio"
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-medium text-primary-foreground shadow-glow hover:scale-[1.03] transition-transform"
               >
-                View my work <ArrowRight className="h-4 w-4" />
+                {t.hero.viewWork} <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href="#contact"
                 className="inline-flex items-center gap-2 rounded-full glass px-6 py-3 font-medium hover:border-primary/50 transition-colors"
               >
-                <Mail className="h-4 w-4" /> Get in touch
+                <Mail className="h-4 w-4" /> {t.hero.getInTouch}
               </a>
+              <CvMenu compact />
             </div>
             <div className="mt-10 flex items-center gap-5 text-muted-foreground">
               <a href="https://www.linkedin.com/in/ranim-abassi" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">
@@ -127,11 +95,11 @@ export function Portfolio() {
               <a href="mailto:ranim.abassi20@gmail.com" className="hover:text-primary transition-colors">
                 <Mail className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-primary transition-colors">
+              <a href="https://github.com/ranimglee" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">
                 <Github className="h-5 w-5" />
               </a>
               <span className="text-sm flex items-center gap-1.5">
-                <MapPin className="h-4 w-4" /> Tunis, Tunisia
+                <MapPin className="h-4 w-4" /> {t.hero.location}
               </span>
             </div>
           </div>
@@ -140,27 +108,18 @@ export function Portfolio() {
       </section>
 
       {/* ABOUT */}
-      <Section id="about" eyebrow="About" title="Building the future, one line at a time">
+      <Section id="about" eyebrow={t.about.eyebrow} title={t.about.title}>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="glass rounded-3xl p-8 shadow-elegant">
-            <p className="text-muted-foreground leading-relaxed">
-              I am Ranim Abassi, a final-year software engineering student
-              specializing in software development. Passionate about creating
-              impactful solutions, I build web and mobile applications using a
-              variety of modern technologies.
-            </p>
-            <p className="mt-4 text-muted-foreground leading-relaxed">
-              I thrive on challenges, particularly those involving innovative
-              technologies, and I am eager to apply my skills in real-world
-              applications.
-            </p>
+            <p className="text-muted-foreground leading-relaxed">{t.about.p1}</p>
+            <p className="mt-4 text-muted-foreground leading-relaxed">{t.about.p2}</p>
           </div>
           <div className="grid grid-cols-2 gap-4">
             {[
-              { label: "Age", value: "24" },
-              { label: "City", value: "Tunis, Tunisia" },
-              { label: "Degree", value: "Software Engineering" },
-              { label: "Freelance", value: "Available" },
+              { label: t.about.age, value: "24" },
+              { label: t.about.city, value: t.hero.location },
+              { label: t.about.degree, value: t.about.degreeValue },
+              { label: t.about.freelance, value: t.about.freelanceValue },
             ].map((item) => (
               <div key={item.label} className="glass rounded-2xl p-5 hover:border-primary/40 transition-colors">
                 <div className="text-xs uppercase tracking-wider text-muted-foreground">{item.label}</div>
@@ -172,7 +131,7 @@ export function Portfolio() {
       </Section>
 
       {/* SKILLS */}
-      <Section id="skills" eyebrow="Skills" title="A toolkit forged through practice">
+      <Section id="skills" eyebrow={t.skills.eyebrow} title={t.skills.title}>
         <div className="grid sm:grid-cols-2 gap-x-8 gap-y-5">
           {skills.map((s, i) => (
             <div key={s.name} className="animate-fade-up" style={{ animationDelay: `${i * 60}ms` }}>
@@ -181,10 +140,7 @@ export function Portfolio() {
                 <span className="text-muted-foreground">{s.level}%</span>
               </div>
               <div className="h-2 rounded-full bg-secondary/60 overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-gradient-primary"
-                  style={{ width: `${s.level}%` }}
-                />
+                <div className="h-full rounded-full bg-gradient-primary" style={{ width: `${s.level}%` }} />
               </div>
             </div>
           ))}
@@ -192,95 +148,130 @@ export function Portfolio() {
       </Section>
 
       {/* RESUME */}
-      <Section id="resume" eyebrow="Resume" title="Education & experience">
+      <Section id="resume" eyebrow={t.resume.eyebrow} title={t.resume.title}>
         <div className="grid md:grid-cols-2 gap-6">
           <TimelineCard
             icon={GraduationCap}
-            title="Education"
-            items={[
-              {
-                heading: "ESPRIT — Higher School of Engineering",
-                meta: "09/2022 — Present",
-                text: "Software Engineering, specializing in Software Development.",
-              },
-              {
-                heading: "Preparatory Institute of Bizerte",
-                meta: "09/2019 — 06/2022",
-                text: "Preparatory Cycle in Mathematics and Physics.",
-              },
-            ]}
+            title={t.resume.education}
+            items={
+              lang === "fr"
+                ? [
+                    {
+                      heading: "ESPRIT — École Supérieure d'Ingénierie",
+                      meta: "09/2022 — Présent",
+                      text: "Ingénierie Logicielle, spécialité Développement Logiciel.",
+                    },
+                    {
+                      heading: "Institut Préparatoire de Bizerte",
+                      meta: "09/2019 — 06/2022",
+                      text: "Cycle préparatoire Mathématiques et Physique.",
+                    },
+                  ]
+                : [
+                    {
+                      heading: "ESPRIT — Higher School of Engineering",
+                      meta: "09/2022 — Present",
+                      text: "Software Engineering, specializing in Software Development.",
+                    },
+                    {
+                      heading: "Preparatory Institute of Bizerte",
+                      meta: "09/2019 — 06/2022",
+                      text: "Preparatory Cycle in Mathematics and Physics.",
+                    },
+                  ]
+            }
           />
           <TimelineCard
             icon={Briefcase}
-            title="Experience"
-            items={[
-              {
-                heading: "Full-Stack Developer Intern · Confledis",
-                meta: "09/2024 — 11/2024 · Paris, France",
-                text: "Built an online restaurant management app with Symfony & Angular, deployed via Docker, managed PostgreSQL.",
-              },
-              {
-                heading: "Web Development Intern · EasyTek",
-                meta: "07/2023 — 09/2023 · Tunis, Tunisia",
-                text: "Developed access control & attendance system using Java 8 and MySQL.",
-              },
-            ]}
+            title={t.resume.experience}
+            items={
+              lang === "fr"
+                ? [
+                    {
+                      heading: "Stagiaire Développeuse Full-Stack · Confledis",
+                      meta: "09/2024 — 11/2024 · Paris, France",
+                      text: "Application de gestion de restaurant en ligne avec Symfony & Angular, déployée via Docker, base PostgreSQL.",
+                    },
+                    {
+                      heading: "Stagiaire Développement Web · EasyTek",
+                      meta: "07/2023 — 09/2023 · Tunis, Tunisie",
+                      text: "Système de contrôle d'accès et de présence en Java 8 et MySQL.",
+                    },
+                  ]
+                : [
+                    {
+                      heading: "Full-Stack Developer Intern · Confledis",
+                      meta: "09/2024 — 11/2024 · Paris, France",
+                      text: "Built an online restaurant management app with Symfony & Angular, deployed via Docker, managed PostgreSQL.",
+                    },
+                    {
+                      heading: "Web Development Intern · EasyTek",
+                      meta: "07/2023 — 09/2023 · Tunis, Tunisia",
+                      text: "Developed access control & attendance system using Java 8 and MySQL.",
+                    },
+                  ]
+            }
           />
         </div>
       </Section>
 
       {/* PORTFOLIO */}
-      <Section id="portfolio" eyebrow="Portfolio" title="Selected projects">
+      <Section id="portfolio" eyebrow={t.portfolio.eyebrow} title={t.portfolio.title}>
         <div className="grid md:grid-cols-2 gap-6">
-          {projects.map((p, i) => (
-            <div
-              key={p.title}
-              className="group relative overflow-hidden rounded-3xl glass p-8 hover:border-primary/40 transition-all hover:-translate-y-1 shadow-elegant"
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${p.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs uppercase tracking-wider text-primary">{p.tag}</span>
-                  <Sparkles className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          {projects.map((p, i) => {
+            const title = lang === "fr" ? p.titleFr : p.titleEn;
+            const desc = lang === "fr" ? p.descFr : p.descEn;
+            return (
+              <button
+                key={p.id}
+                onClick={() => setOpenProject(p)}
+                className="group relative overflow-hidden rounded-3xl glass p-8 text-left hover:border-primary/40 transition-all hover:-translate-y-1 shadow-elegant"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${p.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                <div className="relative">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs uppercase tracking-wider text-primary">{p.tag}</span>
+                    <Sparkles className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-2">{title}</h3>
+                  <p className="text-muted-foreground">{desc}</p>
+                  <div className="mt-6 inline-flex items-center gap-2 text-sm text-primary opacity-80 group-hover:opacity-100 group-hover:gap-3 transition-all">
+                    {t.portfolio.discover} <ArrowRight className="h-4 w-4" />
+                  </div>
                 </div>
-                <h3 className="text-2xl font-semibold mb-2">{p.title}</h3>
-                <p className="text-muted-foreground">{p.desc}</p>
-                <div className="mt-6 inline-flex items-center gap-2 text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  Discover <ArrowRight className="h-4 w-4" />
-                </div>
-              </div>
-            </div>
-          ))}
+              </button>
+            );
+          })}
         </div>
       </Section>
 
       {/* SERVICES */}
-      <Section id="services" eyebrow="Services" title="What I can help you build">
+      <Section id="services" eyebrow={t.services.eyebrow} title={t.services.title}>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {services.map((s) => (
-            <div
-              key={s.title}
-              className="glass rounded-2xl p-6 hover:border-primary/40 hover:-translate-y-1 transition-all"
-            >
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground mb-4">
-                <s.icon className="h-6 w-6" />
+          {t.services.items.map((s, idx) => {
+            const Icon = serviceIcons[idx];
+            return (
+              <div key={s.title} className="glass rounded-2xl p-6 hover:border-primary/40 hover:-translate-y-1 transition-all">
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary text-primary-foreground mb-4">
+                  <Icon className="h-6 w-6" />
+                </div>
+                <h3 className="font-semibold mb-1">{s.title}</h3>
+                <p className="text-sm text-muted-foreground">{s.desc}</p>
               </div>
-              <h3 className="font-semibold mb-1">{s.title}</h3>
-              <p className="text-sm text-muted-foreground">{s.desc}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Section>
 
       {/* CONTACT */}
-      <Section id="contact" eyebrow="Contact" title="Let's create something great">
+      <Section id="contact" eyebrow={t.contact.eyebrow} title={t.contact.title}>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <ContactRow icon={MapPin} label="Location" value="Tunis, Tunisia" />
-            <ContactRow icon={Mail} label="Email" value="ranim.abassi20@gmail.com" href="mailto:ranim.abassi20@gmail.com" />
-            <ContactRow icon={Linkedin} label="LinkedIn" value="ranim-abassi" href="https://www.linkedin.com/in/ranim-abassi" />
-            <ContactRow icon={Calendar} label="Availability" value="Open to freelance & opportunities" />
+            <ContactRow icon={MapPin} label={t.contact.location} value={t.hero.location} />
+            <ContactRow icon={Mail} label={t.contact.email} value="ranim.abassi20@gmail.com" href="mailto:ranim.abassi20@gmail.com" />
+            <ContactRow icon={Linkedin} label={t.contact.linkedin} value="ranim-abassi" href="https://www.linkedin.com/in/ranim-abassi" />
+            <ContactRow icon={Calendar} label={t.contact.availability} value={t.contact.availabilityValue} />
           </div>
           <form
             onSubmit={(e) => {
@@ -290,41 +281,23 @@ export function Portfolio() {
             className="glass rounded-3xl p-6 space-y-4 shadow-elegant"
           >
             <div className="grid sm:grid-cols-2 gap-4">
-              <input
-                required
-                placeholder="Your name"
-                className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
-              />
-              <input
-                required
-                type="email"
-                placeholder="Your email"
-                className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
-              />
+              <input required placeholder={t.contact.yourName} className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors" />
+              <input required type="email" placeholder={t.contact.yourEmail} className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors" />
             </div>
-            <input
-              placeholder="Subject"
-              className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
-            />
-            <textarea
-              required
-              rows={5}
-              placeholder="Tell me about your project…"
-              className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
-            />
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-medium text-primary-foreground shadow-glow hover:scale-[1.03] transition-transform"
-            >
-              Send message <Send className="h-4 w-4" />
+            <input placeholder={t.contact.subject} className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors" />
+            <textarea required rows={5} placeholder={t.contact.message} className="w-full rounded-xl bg-secondary/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none" />
+            <button type="submit" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-medium text-primary-foreground shadow-glow hover:scale-[1.03] transition-transform">
+              {t.contact.send} <Send className="h-4 w-4" />
             </button>
           </form>
         </div>
       </Section>
 
       <footer className="py-10 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Ranim Abassi · Crafted with care.
+        © {new Date().getFullYear()} Ranim Abassi · {t.footer}
       </footer>
+
+      <ProjectModal project={openProject} onClose={() => setOpenProject(null)} />
     </div>
   );
 }
@@ -406,5 +379,11 @@ function ContactRow({
       </div>
     </div>
   );
-  return href ? <a href={href} target="_blank" rel="noreferrer">{inner}</a> : inner;
+  return href ? (
+    <a href={href} target="_blank" rel="noreferrer">
+      {inner}
+    </a>
+  ) : (
+    inner
+  );
 }
