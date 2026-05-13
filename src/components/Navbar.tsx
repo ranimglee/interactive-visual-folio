@@ -1,18 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-
-const links = [
-  { href: "#home", label: "Home" },
-  { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#resume", label: "Resume" },
-  { href: "#portfolio", label: "Portfolio" },
-  { href: "#contact", label: "Contact" },
-];
+import { useLang } from "@/i18n/LanguageContext";
+import { LanguageToggle } from "./LanguageToggle";
+import { CvMenu } from "./CvMenu";
 
 export function Navbar() {
+  const { t } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const links = [
+    { href: "#home", label: t.nav.home },
+    { href: "#about", label: t.nav.about },
+    { href: "#skills", label: t.nav.skills },
+    { href: "#resume", label: t.nav.resume },
+    { href: "#portfolio", label: t.nav.portfolio },
+    { href: "#contact", label: t.nav.contact },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -27,11 +31,7 @@ export function Navbar() {
         scrolled ? "py-3" : "py-5"
       }`}
     >
-      <div
-        className={`mx-auto max-w-6xl px-6 transition-all duration-300 ${
-          scrolled ? "" : ""
-        }`}
-      >
+      <div className="mx-auto max-w-6xl px-6">
         <div
           className={`flex items-center justify-between rounded-full border px-5 py-2.5 transition-all ${
             scrolled ? "glass shadow-elegant" : "border-transparent"
@@ -41,9 +41,12 @@ export function Navbar() {
             <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-primary text-primary-foreground font-bold">
               R
             </span>
-            <span className="text-foreground">Ranim<span className="text-primary">.</span></span>
+            <span className="text-foreground">
+              Ranim<span className="text-primary">.</span>
+            </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
+
+          <nav className="hidden lg:flex items-center gap-1">
             {links.map((l) => (
               <a
                 key={l.href}
@@ -54,12 +57,18 @@ export function Navbar() {
               </a>
             ))}
           </nav>
-          <a
-            href="#contact"
-            className="hidden md:inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:scale-[1.03] transition-transform"
-          >
-            Let's talk
-          </a>
+
+          <div className="hidden md:flex items-center gap-2">
+            <LanguageToggle />
+            <CvMenu compact />
+            <a
+              href="#contact"
+              className="inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:scale-[1.03] transition-transform"
+            >
+              {t.nav.cta}
+            </a>
+          </div>
+
           <button
             className="md:hidden rounded-full p-2 hover:bg-secondary/60"
             onClick={() => setOpen(!open)}
@@ -72,8 +81,9 @@ export function Navbar() {
             </div>
           </button>
         </div>
+
         {open && (
-          <div className="md:hidden mt-2 glass rounded-2xl p-3 animate-fade-up">
+          <div className="md:hidden mt-2 glass rounded-2xl p-3 animate-fade-up space-y-1">
             {links.map((l) => (
               <a
                 key={l.href}
@@ -84,6 +94,10 @@ export function Navbar() {
                 {l.label}
               </a>
             ))}
+            <div className="flex items-center justify-between gap-2 px-2 pt-2 border-t border-border">
+              <LanguageToggle />
+              <CvMenu compact />
+            </div>
           </div>
         )}
       </div>
