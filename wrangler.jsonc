@@ -1,7 +1,0 @@
-
- {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "interactive-visual-folio",
-  "compatibility_date": "2026-06-01",
-  "pages_build_output_dir": "dist/client"
-}
