@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { useEffect, useState, type MouseEvent } from "react";
 import { useLang } from "@/i18n/LanguageContext";
 import { LanguageToggle } from "./LanguageToggle";
@@ -45,14 +44,14 @@ export function Navbar() {
             scrolled ? "glass shadow-elegant" : "border-transparent"
           }`}
         >
-          <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight">
+          <a href="#home" className="flex items-center gap-2 font-semibold tracking-tight">
             <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-primary text-primary-foreground font-bold">
               R
             </span>
             <span className="text-foreground">
               Ranim<span className="text-primary">.</span>
             </span>
-          </Link>
+          </a>
 
           <nav className="hidden lg:flex items-center gap-1">
             {links.map((l) => (
