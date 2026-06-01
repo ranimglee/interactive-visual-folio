@@ -63,20 +63,20 @@
 
 :root {
   --radius: 0.875rem;
-  --background: oklch(0.13 0.02 270);
-  --foreground: oklch(0.97 0.01 260);
-  --card: oklch(0.18 0.03 270 / 0.6);
-  --card-foreground: oklch(0.97 0.01 260);
-  --popover: oklch(0.18 0.03 270);
-  --popover-foreground: oklch(0.97 0.01 260);
+  --background: oklch(0.125 0.014 145);
+  --foreground: oklch(0.97 0.012 95);
+  --card: oklch(0.18 0.018 145 / 0.64);
+  --card-foreground: oklch(0.97 0.012 95);
+  --popover: oklch(0.17 0.018 145);
+  --popover-foreground: oklch(0.97 0.012 95);
   --primary: oklch(0.78 0.18 195);
-  --primary-foreground: oklch(0.13 0.02 270);
-  --secondary: oklch(0.22 0.04 280);
-  --secondary-foreground: oklch(0.97 0.01 260);
-  --muted: oklch(0.2 0.03 275);
-  --muted-foreground: oklch(0.7 0.03 260);
-  --accent: oklch(0.7 0.22 320);
-  --accent-foreground: oklch(0.13 0.02 270);
+  --primary-foreground: oklch(0.12 0.018 145);
+  --secondary: oklch(0.22 0.022 150);
+  --secondary-foreground: oklch(0.97 0.012 95);
+  --muted: oklch(0.2 0.018 145);
+  --muted-foreground: oklch(0.72 0.035 105);
+  --accent: oklch(0.75 0.16 72);
+  --accent-foreground: oklch(0.12 0.018 145);
   --destructive: oklch(0.65 0.25 25);
   --destructive-foreground: oklch(0.97 0.01 260);
   --border: oklch(1 0 0 / 0.08);
@@ -87,19 +87,19 @@
   --chart-3: oklch(0.75 0.2 80);
   --chart-4: oklch(0.65 0.2 150);
   --chart-5: oklch(0.7 0.22 30);
-  --sidebar: oklch(0.16 0.03 270);
-  --sidebar-foreground: oklch(0.97 0.01 260);
+  --sidebar: oklch(0.16 0.018 145);
+  --sidebar-foreground: oklch(0.97 0.012 95);
   --sidebar-primary: oklch(0.78 0.18 195);
-  --sidebar-primary-foreground: oklch(0.13 0.02 270);
-  --sidebar-accent: oklch(0.22 0.04 280);
-  --sidebar-accent-foreground: oklch(0.97 0.01 260);
+  --sidebar-primary-foreground: oklch(0.12 0.018 145);
+  --sidebar-accent: oklch(0.22 0.022 150);
+  --sidebar-accent-foreground: oklch(0.97 0.012 95);
   --sidebar-border: oklch(1 0 0 / 0.08);
   --sidebar-ring: oklch(0.78 0.18 195);
 
-  --gradient-primary: linear-gradient(135deg, oklch(0.78 0.18 195), oklch(0.7 0.22 320));
-  --gradient-glow: radial-gradient(circle at 50% 0%, oklch(0.78 0.18 195 / 0.3), transparent 60%);
-  --shadow-glow: 0 0 60px oklch(0.78 0.18 195 / 0.35);
-  --shadow-elegant: 0 20px 60px -20px oklch(0.13 0.02 270 / 0.6);
+  --gradient-primary: linear-gradient(135deg, oklch(0.78 0.18 195), oklch(0.75 0.16 72));
+  --gradient-glow: radial-gradient(circle at 50% 0%, oklch(0.78 0.18 195 / 0.22), transparent 62%);
+  --shadow-glow: 0 0 55px oklch(0.78 0.18 195 / 0.28);
+  --shadow-elegant: 0 24px 70px -28px oklch(0.08 0.02 145 / 0.75);
 }
 
 @layer base {
@@ -114,7 +114,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: Aptos, "Segoe UI", ui-sans-serif, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
@@ -145,18 +145,58 @@
   .shadow-elegant {
     box-shadow: var(--shadow-elegant);
   }
+
+  .font-display {
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  .cinematic-field {
+    background:
+      linear-gradient(120deg, oklch(0.19 0.035 150 / 0.75), transparent 42%),
+      linear-gradient(250deg, oklch(0.25 0.08 75 / 0.28), transparent 38%),
+      linear-gradient(180deg, oklch(0.13 0.014 145), oklch(0.1 0.012 130));
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.animate-float { animation: float 6s ease-in-out infinite; }
-.animate-fade-up { animation: fade-up 0.8s ease-out both; }
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out both;
+}
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,14 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { FileDown, ChevronDown, Eye, Download } from "lucide-react";
+import { ChevronDown, Download, Eye, FileDown } from "lucide-react";
 import { useLang } from "@/i18n/LanguageContext";
 
-// 👉 Place CV PDFs in public/cv/ with these exact names:
-//    ranim-cv-fr.pdf, ranim-cv-en.pdf, ranim-cv-de.pdf, ranim-cv-tr.pdf
 const CV_LANGS = [
-  { code: "fr", file: "/cv/ranim-cv-fr.pdf", flag: "🇫🇷" },
-  { code: "en", file: "/cv/ranim-cv-en.pdf", flag: "🇬🇧" },
-  { code: "de", file: "/cv/ranim-cv-de.pdf", flag: "🇩🇪" },
-  { code: "tr", file: "/cv/ranim-cv-tr.pdf", flag: "🇹🇷" },
+  { code: "en", file: "/cv/cv_english.pdf", flag: "EN" },
+  { code: "fr", file: "/cv/cv_fran%C3%A7ais.pdf", flag: "FR" },
 ] as const;
 
 export function CvMenu({ compact = false }: { compact?: boolean }) {
@@ -24,11 +20,9 @@ export function CvMenu({ compact = false }: { compact?: boolean }) {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  const labels: Record<string, string> = {
-    fr: t.cv.french,
+  const labels: Record<(typeof CV_LANGS)[number]["code"], string> = {
     en: t.cv.english,
-    de: t.cv.german,
-    tr: t.cv.turkish,
+    fr: t.cv.french,
   };
 
   return (
@@ -47,7 +41,7 @@ export function CvMenu({ compact = false }: { compact?: boolean }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-72 glass rounded-2xl p-3 shadow-elegant animate-fade-up z-50">
+        <div className="absolute right-0 z-50 mt-2 w-72 animate-fade-up rounded-2xl glass p-3 shadow-elegant">
           <div className="px-2 pb-2 text-xs uppercase tracking-wider text-muted-foreground">
             {t.cv.pickLang}
           </div>
@@ -55,10 +49,15 @@ export function CvMenu({ compact = false }: { compact?: boolean }) {
             {CV_LANGS.map((c) => (
               <div
                 key={c.code}
-                className="flex items-center justify-between gap-2 rounded-xl px-3 py-2 hover:bg-secondary/60 transition-colors"
+                className="flex items-center justify-between gap-2 rounded-xl px-3 py-2 transition-colors hover:bg-secondary/60"
               >
                 <span className="flex items-center gap-2 text-sm">
-                  <span aria-hidden>{c.flag}</span>
+                  <span
+                    aria-hidden
+                    className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[0.65rem] font-semibold text-primary"
+                  >
+                    {c.flag}
+                  </span>
                   {labels[c.code]}
                 </span>
                 <div className="flex items-center gap-1">
@@ -67,7 +66,7 @@ export function CvMenu({ compact = false }: { compact?: boolean }) {
                     target="_blank"
                     rel="noreferrer"
                     title={t.cv.view}
-                    className="grid h-8 w-8 place-items-center rounded-lg hover:bg-primary/20 text-muted-foreground hover:text-primary transition-colors"
+                    className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-primary/20 hover:text-primary"
                   >
                     <Eye className="h-4 w-4" />
                   </a>
@@ -75,7 +74,7 @@ export function CvMenu({ compact = false }: { compact?: boolean }) {
                     href={c.file}
                     download
                     title={t.cv.download}
-                    className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-primary text-primary-foreground hover:scale-105 transition-transform"
+                    className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-primary text-primary-foreground transition-transform hover:scale-105"
                   >
                     <Download className="h-4 w-4" />
                   </a>

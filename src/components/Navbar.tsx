@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { useLang } from "@/i18n/LanguageContext";
 import { LanguageToggle } from "./LanguageToggle";
 import { CvMenu } from "./CvMenu";
@@ -12,9 +12,8 @@ export function Navbar() {
   const links = [
     { href: "#home", label: t.nav.home },
     { href: "#about", label: t.nav.about },
-    { href: "#skills", label: t.nav.skills },
-    { href: "#resume", label: t.nav.resume },
-    { href: "#portfolio", label: t.nav.portfolio },
+    { href: "#featured-work", label: t.nav.portfolio },
+    { href: "#now", label: "Now" },
     { href: "#contact", label: t.nav.contact },
   ];
 
@@ -24,6 +23,15 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const scrollToContact = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    setOpen(false);
+  };
 
   return (
     <header
@@ -63,6 +71,7 @@ export function Navbar() {
             <CvMenu compact />
             <a
               href="#contact"
+              onClick={scrollToContact}
               className="inline-flex items-center rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:scale-[1.03] transition-transform"
             >
               {t.nav.cta}
